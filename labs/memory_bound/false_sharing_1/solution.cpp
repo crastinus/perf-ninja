@@ -3,15 +3,20 @@
 #include <cstring>
 #include <omp.h>
 #include <vector>
+#include <unordered_map>
 
 std::size_t solution(const std::vector<uint32_t> &data, int thread_count) {
   // Using std::atomic counters to disallow compiler to promote `target`
   // memory location into a register. This way we ensure that the store
   // to `target` stays inside the loop.
   struct Accumulator {
-    std::atomic<uint32_t> value = 0;
+    uint32_t value = 0;
   };
-  std::vector<Accumulator> accumulators(thread_count);
+
+  std::unordered_map<int,Accumulator> accumulators;
+  for (int i = 0; i < thread_count; i++) {
+    accumulators[i].value = 0;
+  }
 
 #pragma omp parallel num_threads(thread_count) default(none)                   \
     shared(accumulators, data)
@@ -34,7 +39,7 @@ std::size_t solution(const std::vector<uint32_t> &data, int thread_count) {
 
   std::size_t result = 0;
   for (const auto &accumulator : accumulators) {
-    result += accumulator.value;
+    result += accumulator.second.value;
   }
   return result;
 }
