@@ -48,6 +48,7 @@ bool check_entry(int first, int second) {
 }
 
 int main() {
+  std::cout << sizeof(S) << "\n";
   std::array<S, N> arr;
   init(arr);
 

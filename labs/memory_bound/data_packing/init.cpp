@@ -2,14 +2,15 @@
 #include "solution.h"
 #include <random>
 
+// 0 < 100
 S create_entry(int first_value, int second_value) {
   S entry;
 
-  entry.i = first_value;
-  entry.s = static_cast<short>(second_value);
-  entry.l = static_cast<long long>(first_value * second_value);
-  entry.d = static_cast<double>(first_value) / maxRandom;
-  entry.b = first_value < second_value;
+  entry.i = first_value; // 0..100 8bit
+  entry.s = static_cast<short>(second_value); // 0..100 8bit
+  entry.l = static_cast<long long>(first_value * second_value); // 0..10000 16bit
+  entry.d = static_cast<double>(first_value) / maxRandom; // 0.00..1.00
+  entry.b = first_value < second_value; // 1/2  1 bit
 
   return entry;
 }
