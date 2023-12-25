@@ -1,6 +1,7 @@
 #include "solution.hpp"
 #include <array>
 #include <iostream>
+#include <unordered_set>
 
 unsigned getSumOfDigits(unsigned n) {
   unsigned sum = 0;
@@ -23,19 +24,17 @@ unsigned getSumOfDigits(unsigned n) {
 unsigned solution(List *l1, List *l2) {
   unsigned retVal = 0;
 
-  List *head2 = l2;
-  // O(N^2) algorithm:
+  std::unordered_set<unsigned> values;
   while (l1) {
-    unsigned v = l1->value;
-    l2 = head2;
-    while (l2) {
-      if (l2->value == v) {
-        retVal += getSumOfDigits(v);
-        break;
-      }
-      l2 = l2->next;
-    }
+    values.insert(l1->value);
     l1 = l1->next;
+  }
+
+  while (l2) {
+    if (values.find(l2->value) != values.end()) {
+      retVal += getSumOfDigits(l2->value);
+    }
+    l2 = l2->next;
   }
 
   return retVal;

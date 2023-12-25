@@ -50,17 +50,26 @@ static float cosine(float x) {
 // We do calculations in double precision then convert to float.
 constexpr float DEGREE_TO_RADIAN = (2 * PI_D) / UINT32_MAX;
 
+
 // Simulate the motion of the particles.
 // For every particle, we generate a random angle and move the particle
 // in the corresponding direction.
 template <class RNG>
 void randomParticleMotion(std::vector<Particle> &particles, uint32_t seed) {
+  float last_sin = 0;
+  float last_cos = 0;
+  float last_angle_rad;
+
   RNG rng(seed);  
   for (int i = 0; i < STEPS; i++)
     for (auto &p : particles) {
       uint32_t angle = rng.gen();
       float angle_rad = angle * DEGREE_TO_RADIAN;
-      p.x += cosine(angle_rad) * p.velocity;
-      p.y += sine(angle_rad) * p.velocity;
+      if (angle_rad != last_angle_rad) {
+        last_cos = cosine(angle_rad);
+        last_sin = sine(angle_rad) ;
+      }
+      p.x += last_cos * p.velocity;
+      p.y += last_sin * p.velocity;
     }
 }

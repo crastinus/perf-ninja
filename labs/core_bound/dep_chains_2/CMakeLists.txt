@@ -12,5 +12,8 @@ endmacro()
 # Clear the -O3 flag in the CMAKE_CXX_FLAGS_RELEASE, otherwise it will reenable SLP vectorization.
 remove_cxx_flag("-O3")
 
+# add_compile_options(-fsanitize=address)
+# add_link_options(-fsanitize=address)
+
 string(REGEX MATCH "^(.*)[\\/]labs[\\/].*$" repo "${CMAKE_CURRENT_SOURCE_DIR}")
 include(${CMAKE_MATCH_1}/tools/labs.cmake)
